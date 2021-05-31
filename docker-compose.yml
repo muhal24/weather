@@ -1,0 +1,61 @@
+version: '3'
+services:
+
+  api:
+    build: .
+    hostname: weather_api
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_HOST=db
+    depends_on:
+      - db
+      - influxdb
+    ports:
+      - 4000:4000
+    networks:
+      - backend
+
+  db:
+    image: postgres
+    hostname: weather_db
+    env_file:
+      - .env
+    ports:
+      - 5432:5432
+    networks:
+      - backend
+    volumes:
+      - weather_data:/var/lib/postgresql/data
+
+  influxdb:
+    image: influxdb:1.4-alpine
+    hostname: weather_influxdb
+    env_file:
+      - .env
+    ports:
+      - 8083:8083
+      - 8086:8086
+      - 8090:8090
+    networks:
+      - backend
+    volumes:
+      - weather_data:/var/lib/influxdb
+
+  grafana:
+    image: grafana/grafana:latest
+    hostname: weather_grafana
+    env_file:
+      - .env
+    ports:
+      - 3000:3000
+    networks:
+      - backend
+    depends_on:
+      - influxdb
+
+networks:
+  backend:
+
+volumes:
+  weather_data:

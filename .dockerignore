@@ -1,0 +1,25 @@
+.git
+.gitignore
+.env
+.docker-compose*
+.log
+README.md
+tmp
+
+# Mix artifacts
+_build
+deps
+*.ez
+
+# don't include our release builds
+releases
+
+# don't include our release builds
+releases
+
+# Generate on crash by the VM
+erl_crash.dump
+
+# Static artifacts
+node_modules
+priv
